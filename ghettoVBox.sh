@@ -8,7 +8,7 @@
 ##################################################################
 
 LAST_MODIFIED_DATE="16.10.2018"
-VERSION=0.4
+VERSION=0.5.00
 
 # directory that all VM backups should go 
 VM_BACKUP_VOLUME=""
