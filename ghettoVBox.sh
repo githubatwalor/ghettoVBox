@@ -7,8 +7,8 @@
 #                   User Definable Parameters
 ##################################################################
 
-LAST_MODIFIED_DATE="16.10.2018"
-VERSION=0.5.00
+LAST_MODIFIED_DATE="18.02.2020"
+VERSION=0.5.01
 
 # directory that all VM backups should go 
 VM_BACKUP_VOLUME=""
@@ -117,12 +117,12 @@ if [ -z "${VM_BACKUP_VOLUME}" ] ; then
         exit 1
 fi
 # Testowanie czy podana nazwa odpowiada maszynie wirtualnej
-function VMExists() {
+VMExists() {
 	VM_TO_SEARCH=$1
 	
 	isVMFound=0
 	FOUND=$( ${VBOXCOMMAND} list vms |awk /\"${VM_TO_SEARCH}\"/'{print "1"}')
-        if [ ${FOUND} == "1" ] ; then
+        if [ ${FOUND} = "1" ] ; then
                 isVMFound=1
         fi
 
@@ -158,7 +158,7 @@ VDINAMES=""
 IFS="$(printf '\n\t')"
 for VDINAME in `${VBOXCOMMAND} showvminfo ${VM2BACKUP} |grep -e "^\(IDE\|SATA\)"|sed -e 's/^[^:]\+:[ ]*//'|sed -e 's/[ ]*(UUID.\+)//'` ; do
         if [ "${VDINAME}" != "Empty" ] ; then
-		if [[ "${VDINAMES}" != "" ]] ; then
+		if [ "${VDINAMES}" != "" ] ; then
 			VDINAMES="${VDINAMES}${gVSS}"
 		fi
                 VDINAMES="${VDINAMES}${VDINAME}"
