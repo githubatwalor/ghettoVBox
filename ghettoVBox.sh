@@ -52,13 +52,13 @@ logger() {
     LOG_TYPE=$1
     MSG=$2
 
-    if [[ "${LOG_LEVEL}" == "debug" ]] && [[ "${LOG_TYPE}" == "debug" ]] || [[ "${LOG_TYPE}" == "info" ]] || [[ "${LOG_TYPE}" == "dryrun" ]]; then
+    if [ "${LOG_LEVEL}" = "debug" ] && [ "${LOG_TYPE}" = "debug" ] || [ "${LOG_TYPE}" = "info" ] || [ "${LOG_TYPE}" = "dryrun" ]; then
         TIME=$(date +%F" "%H:%M:%S)
-        if [[ "${LOG_TO_STDOUT}" -eq 1 ]] ; then
+        if [ "${LOG_TO_STDOUT}" -eq 1 ] ; then
             echo -e "${TIME} -- ${LOG_TYPE}: ${MSG}"
         fi
 
-        if [[ -n "${LOG_OUTPUT}" ]] ; then
+        if [ -n "${LOG_OUTPUT}" ] ; then
             echo -e "${TIME} -- ${LOG_TYPE}: ${MSG}" >> "${LOG_OUTPUT}"
         fi
 
@@ -112,7 +112,7 @@ BACKUP_DIR=${BACKUPPOOL}/${VM2BACKUP}/`date +%F_%H-%M-%S`
 
 # 0. 
 # Testowanie czy jest zdefiniowany katalog na backupy w ogóle
-if [[ -z "${VM_BACKUP_VOLUME}" ]] ; then
+if [ -z "${VM_BACKUP_VOLUME}" ] ; then
         echo "Virtal machine pool directory is not set !!!"
         exit 1
 fi
@@ -122,17 +122,17 @@ function VMExists() {
 	
 	isVMFound=0
 	FOUND=$( ${VBOXCOMMAND} list vms |awk /\"${VM_TO_SEARCH}\"/'{print "1"}')
-        if [[ ${FOUND} == "1" ]] ; then
+        if [ ${FOUND} == "1" ] ; then
                 isVMFound=1
         fi
 
 }
-if [[ -z "${VM2BACKUP}" ]] ; then
+if [ -z "${VM2BACKUP}" ] ; then
 	echo "Virtal machine to backup name is not set !!!"
 	exit 1
 fi
 VMExists ${VM2BACKUP}
-if [[ ${isVMFound} -ne 1 ]] ; then
+if [ ${isVMFound} -ne 1 ] ; then
 	echo "Virtal machine named ${VM2BACKUP} doesn't exist !!!"
 	exit 1
 fi
@@ -157,7 +157,7 @@ gVSS="#10#13"
 VDINAMES=""
 IFS="$(printf '\n\t')"
 for VDINAME in `${VBOXCOMMAND} showvminfo ${VM2BACKUP} |grep -e "^\(IDE\|SATA\)"|sed -e 's/^[^:]\+:[ ]*//'|sed -e 's/[ ]*(UUID.\+)//'` ; do
-        if [[ "${VDINAME}" != "Empty" ]] ; then
+        if [ "${VDINAME}" != "Empty" ] ; then
 		if [[ "${VDINAMES}" != "" ]] ; then
 			VDINAMES="${VDINAMES}${gVSS}"
 		fi
