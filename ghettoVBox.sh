@@ -7,8 +7,8 @@
 #                   User Definable Parameters
 ##################################################################
 
-LAST_MODIFIED_DATE="18.02.2020"
-VERSION=0.5.01
+LAST_MODIFIED_DATE="24.10.2024"
+VERSION=0.5.02
 
 # directory that all VM backups should go 
 VM_BACKUP_VOLUME=""
@@ -147,16 +147,17 @@ cp "${CONFIG_FILE}" "${BACKUP_DIR}/"
 
 # 2.1 ustalenie nazw dysków wirtualnych maszyny
 #     musi być ustalone przed zrobieniem snapshota
-# wykrywa urządzenia IDE i SATA w opisie maszyny
+# wykrywa urządzenia IDE, SATA i SCSI w opisie maszyny
 #  parsuje i kopiuje wszystkie, które nie są Empty
 #  IDE (1, 0): Empty
 #  SATA (0, 0): /run/media/seweryn/ADATA_NH13/VM.new/snapshot_test_C7/snapshot_test_C7-disk1.vdi (UUID: 1b517908-b490-402a-9c0a-de73fd84c120)
+#  SCSI (0, 0): /home/vbox/VirtualBox VMs/albert/albert.do.fantoma-disk001.vmdk (UUID: 943fffdc-d974-47c8-8b05-5b8f09e0490c)
 
 # ghettoVBox string separator
 gVSS="#10#13"
 VDINAMES=""
 IFS="$(printf '\n\t')"
-for VDINAME in `${VBOXCOMMAND} showvminfo ${VM2BACKUP} |grep -e "^\(IDE\|SATA\)"|sed -e 's/^[^:]\+:[ ]*//'|sed -e 's/[ ]*(UUID.\+)//'` ; do
+for VDINAME in `${VBOXCOMMAND} showvminfo ${VM2BACKUP} |grep -e "^\(IDE\|SATA\|SCSI\)"|sed -e 's/^[^:]\+:[ ]*//'|sed -e 's/[ ]*(UUID.\+)//'` ; do
         if [ "${VDINAME}" != "Empty" ] ; then
 		if [ "${VDINAMES}" != "" ] ; then
 			VDINAMES="${VDINAMES}${gVSS}"
